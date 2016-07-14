@@ -13,4 +13,9 @@ public class Cruiser extends Ship{
 		return false;
 	}
 
+	public void print() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

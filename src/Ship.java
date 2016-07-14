@@ -5,7 +5,6 @@ public abstract class Ship extends Tile {
 	int length;
 	boolean horizontal;
 	boolean[] hits = new boolean[length];
-	
 
 	public boolean shootAt(int x, int y) {
 		if (horizontal == true) {
@@ -48,24 +47,60 @@ public abstract class Ship extends Tile {
 		}
 		return false;
 	}
-	
-	public void print(int x, int y)
-	{
-		if(horizontal == true)
-		{
-			int distance = x - shipRow;
-			if(hits[distance] == true)
-			{
-				
+
+	public boolean okToPlaceShipAt(int i, int j, boolean isHorizontal, Board board) {
+		boolean okay = true;
+		if (isHorizontal == true) {
+			for (int k = 0; k < getLength() - 1; k++) {
+				if (board.isOccupied(i, j + k) == true) {
+					okay = false;
+				}
+			}
+		} else {
+			for (int k = 0; k < getLength() - 1; k++) {
+				if (board.isOccupied(i + k, j) == true) {
+					okay = false;
+				}
+			}
+		}
+		return okay;
+	}
+
+	public void placeShipAt(int i, int j, boolean isHorizontal, Board board) {
+		if (isHorizontal == true) {
+			for (int k = 0; k < getLength() - 1; k++) {
+				board.getTiles()[i][j + k] = this;
+			}
+		} else {
+			for (int k = 0; k < getLength() - 1; k++) {
+				board.getTiles()[i + k][j] = this;
+			}
+		}
+		setShipCol(j);
+		setShipRow(i);
+		setHorizontal(isHorizontal);
+	}
+
+	public void print(int x, int y, boolean[][] board) {
+		// if(horizontal == true)
+		// {
+		// int distance = x - shipRow;
+		// if(hits[distance] == true)
+		// {
+		//
+		// }
+		// }
+		if (board[x][y] == false) {
+			System.out.println(". ");
+		} else {
+			if (isSunk() == false) {
+				System.out.println("S ");
+			} else {
+				System.out.println("X ");
 			}
 		}
 	}
-	
-	public void print()
-	{
-		System.out.println("X");
-	}
-	
+
 	public abstract boolean shipType();
 
 	public boolean[] getHits() {
